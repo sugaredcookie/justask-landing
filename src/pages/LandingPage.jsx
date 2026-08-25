@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import {
-  Menu, X, Github, Download, ChevronDown,
+  Menu, X, Github, Download,
   GraduationCap, Briefcase, Heart,
-  MessageCircle, Calendar, Check,
-  Code, Server, Database, Layers, Monitor, Zap
+  MessageCircle, Calendar, Check
 } from 'lucide-react';
 
 const categories = [
@@ -78,6 +78,7 @@ export default function LandingPage() {
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-[#94A3B8]">
           <a href="#features" className="hover:text-white transition-colors">Features</a>
           <a href="#categories" className="hover:text-white transition-colors">Categories</a>
+          <Link to="/masthead" className="hover:text-white transition-colors">Team</Link>
           <a href="https://github.com/sugaredcookie/justAsk" className="hover:text-white transition-colors">GitHub</a>
           <a href="#download" className="bg-[#22C55E] hover:bg-[#16A34A] text-white px-5 py-2.5 rounded-full text-sm font-medium transition-colors shadow-lg shadow-[#22C55E]/20">Download</a>
         </div>
@@ -97,9 +98,10 @@ export default function LandingPage() {
           >
             <a href="#features" onClick={() => setIsNavOpen(false)} className="hover:text-[#22C55E] transition-colors">Features</a>
             <a href="#categories" onClick={() => setIsNavOpen(false)} className="hover:text-[#22C55E] transition-colors">Categories</a>
+            <Link to="/masthead" onClick={() => setIsNavOpen(false)} className="hover:text-[#22C55E] transition-colors">Team</Link>
             <a href="#download" onClick={() => setIsNavOpen(false)} className="bg-[#22C55E] hover:bg-[#16A34A] px-8 py-3 rounded-full transition-colors">Download</a>
           </motion.div>
-        )}z
+        )}
       </AnimatePresence>
 
       {/* Hero */}
@@ -179,7 +181,7 @@ export default function LandingPage() {
               key={idx}
               {...fadeUp}
               transition={{ delay: idx * 0.1 }}
-              className="bg-[#151B23] rounded-2xl p-8 border border-[#26303D] card-hover"
+              className="bg-[#151B23] rounded-2xl p-8 border border-[#26303D]"
             >
               <div className="bg-[#22C55E]/10 w-12 h-12 rounded-xl flex items-center justify-center mb-5">{cat.icon}</div>
               <h4 className="text-2xl font-semibold text-[#F8FAFC]">{cat.title}</h4>
@@ -296,7 +298,7 @@ export default function LandingPage() {
             </a>
           </div>
           <p className="text-xs text-[#94A3B8] mt-6">
-            ⚡ We'll notify you when the APK is ready. Join the waitlist by starring us on GitHub.
+            We'll notify you when the APK is ready. Join the waitlist by starring us on GitHub.
           </p>
         </div>
       </section>
