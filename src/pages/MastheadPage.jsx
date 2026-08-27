@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Menu, X, ArrowLeft, 
-  Users, Sparkles, ChevronLeft, ChevronRight, Pause, Play
+  Users, Sparkles
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -95,26 +95,29 @@ const TeamCard = ({ member }) => {
   const [imageError, setImageError] = useState(false);
 
   return (
-    <div className="flex-shrink-0 w-[280px] md:w-[320px] mx-3">
+    <div className="flex-shrink-0 w-[260px] sm:w-[280px] md:w-[320px] px-2 sm:px-3">
       <div className={`
-        relative rounded-2xl p-6
-        h-[360px]
+        relative rounded-2xl p-5 sm:p-6
+        h-[380px] sm:h-[400px]
         flex flex-col
-        bg-[#151B23] border transition-all duration-500
+        bg-[#151B23] border transition-all duration-300
         border-[#26303D] hover:border-[#22C55E]/30 hover:shadow-xl hover:shadow-[#22C55E]/5
-        hover:transform hover:-translate-y-2
+        hover:-translate-y-1 sm:hover:-translate-y-2
       `}>
-        <div className="absolute inset-0 rounded-2xl transition-opacity duration-500 opacity-0 hover:opacity-100 bg-gradient-to-br from-[#22C55E]/5 to-transparent" />
+        <div className="absolute inset-0 rounded-2xl transition-opacity duration-300 opacity-0 hover:opacity-100 bg-gradient-to-br from-[#22C55E]/5 to-transparent" />
 
         <div className="relative z-10 h-full flex flex-col">
-          <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-[#22C55E]/10 border border-[#22C55E]/20 px-2.5 py-1 rounded-full">
-            <span className="text-[10px] text-[#22C55E] font-medium">
-              {member.isFounder ? '★ FOUNDER' : member.tag}
-            </span>
+          {/* Tag - Positioned above photo */}
+          <div className="flex justify-center mb-3 sm:mb-4">
+            <div className="flex items-center gap-1.5 bg-[#22C55E]/10 border border-[#22C55E]/20 px-3 py-1 rounded-full">
+              <span className="text-[10px] sm:text-xs text-[#22C55E] font-medium">
+                {member.isFounder ? '★ FOUNDER' : member.tag}
+              </span>
+            </div>
           </div>
 
-          <div className="flex-1 flex flex-col items-center justify-center">
-            <div className="relative w-24 h-24 rounded-2xl flex items-center justify-center bg-gradient-to-br ${member.color} shadow-lg overflow-hidden">
+          <div className="flex-1 flex flex-col items-center">
+            <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl flex items-center justify-center bg-gradient-to-br ${member.color} shadow-lg overflow-hidden">
               {member.photo && !imageError ? (
                 <img 
                   src={member.photo} 
@@ -123,26 +126,26 @@ const TeamCard = ({ member }) => {
                   onError={() => setImageError(true)}
                 />
               ) : (
-                <span className="text-3xl font-bold text-white select-none">
+                <span className="text-2xl sm:text-3xl font-bold text-white select-none">
                   {member.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)}
                 </span>
               )}
             </div>
 
-            <h3 className="text-center text-lg font-bold text-[#F8FAFC] tracking-tight mt-4">
+            <h3 className="text-center text-base sm:text-lg font-bold text-[#F8FAFC] tracking-tight mt-3 sm:mt-4">
               {member.name}
             </h3>
             
-            <p className="text-center text-sm font-medium text-[#22C55E] mt-1 mb-3">
+            <p className="text-center text-xs sm:text-sm font-medium text-[#22C55E] mt-1 mb-2 sm:mb-3">
               {member.role}
             </p>
 
-            <p className="text-center text-sm text-[#94A3B8] leading-relaxed px-1">
+            <p className="text-center text-xs sm:text-sm text-[#94A3B8] leading-relaxed px-1 line-clamp-3 sm:line-clamp-none">
               {member.description}
             </p>
           </div>
 
-          <div className="mt-4 h-0.5 w-16 mx-auto rounded-full bg-[#26303D] relative overflow-hidden flex-shrink-0">
+          <div className="mt-3 sm:mt-4 h-0.5 w-12 sm:w-16 mx-auto rounded-full bg-[#26303D] relative overflow-hidden flex-shrink-0">
             <div className="absolute inset-0 bg-gradient-to-r from-[#22C55E] to-emerald-400" />
           </div>
         </div>
@@ -154,7 +157,6 @@ const TeamCard = ({ member }) => {
 const MastheadPage = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(true);
   const scrollContainerRef = useRef(null);
   const animationRef = useRef(null);
 
@@ -172,11 +174,9 @@ const MastheadPage = () => {
     const container = scrollContainerRef.current;
     if (!container) return;
 
-    const scrollSpeed = 1.2;
+    const scrollSpeed = 1.5;
 
     const autoScroll = () => {
-      if (!isPlaying) return;
-      
       if (container) {
         const maxScroll = container.scrollWidth - container.clientWidth;
         const currentScroll = container.scrollLeft;
@@ -197,33 +197,18 @@ const MastheadPage = () => {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [isPlaying]);
-
-  const scroll = (direction) => {
-    if (scrollContainerRef.current) {
-      const scrollAmount = 340;
-      const newScrollLeft = scrollContainerRef.current.scrollLeft + (direction === 'left' ? -scrollAmount : scrollAmount);
-      scrollContainerRef.current.scrollTo({
-        left: newScrollLeft,
-        behavior: 'smooth'
-      });
-    }
-  };
-
-  const togglePlay = () => {
-    setIsPlaying(!isPlaying);
-  };
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#0B0F14] text-[#F8FAFC] font-sans overflow-x-hidden">
-      <nav className={`fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-4 flex items-center justify-between transition-all duration-300 ${
+      <nav className={`fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 md:px-12 py-3 sm:py-4 flex items-center justify-between transition-all duration-300 ${
         scrolled ? 'bg-[#0B0F14]/95 backdrop-blur-xl shadow-[0_1px_0_0_rgba(38,48,61,0.3)]' : 'bg-transparent'
       }`}>
-        <Link to="/" className="flex items-center gap-3 group" onClick={() => window.scrollTo(0, 0)}>
-          <div className="p-1.5 rounded-full bg-[#22C55E]/10 group-hover:bg-[#22C55E]/20 transition-colors">
-            <ArrowLeft className="w-4 h-4 text-[#94A3B8] group-hover:text-[#22C55E] transition-colors" />
+        <Link to="/" className="flex items-center gap-2 sm:gap-3 group" onClick={() => window.scrollTo(0, 0)}>
+          <div className="p-1 sm:p-1.5 rounded-full bg-[#22C55E]/10 group-hover:bg-[#22C55E]/20 transition-colors">
+            <ArrowLeft className="w-3 h-3 sm:w-4 sm:h-4 text-[#94A3B8] group-hover:text-[#22C55E] transition-colors" />
           </div>
-          <span className="text-sm font-medium text-[#94A3B8] group-hover:text-white transition-colors">Back to Home</span>
+          <span className="text-xs sm:text-sm font-medium text-[#94A3B8] group-hover:text-white transition-colors">Back</span>
         </Link>
         <button className="md:hidden text-white p-2 hover:bg-white/10 rounded-lg transition-colors" onClick={() => setIsNavOpen(!isNavOpen)}>
           {isNavOpen ? <X size={24} /> : <Menu size={24} />}
@@ -243,7 +228,7 @@ const MastheadPage = () => {
         )}
       </AnimatePresence>
 
-      <section className="relative pt-32 md:pt-44 px-6 md:px-12 max-w-7xl mx-auto">
+      <section className="relative pt-28 sm:pt-32 md:pt-44 px-4 sm:px-6 md:px-12 max-w-7xl mx-auto">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-40 -right-40 w-96 h-96 bg-[#22C55E]/5 rounded-full blur-3xl" />
           <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-[#22C55E]/5 rounded-full blur-3xl" />
@@ -256,86 +241,47 @@ const MastheadPage = () => {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="relative z-10 text-center max-w-4xl mx-auto"
         >
-          <div className="inline-flex items-center gap-2 bg-[#22C55E]/10 text-[#22C55E] px-5 py-2 rounded-full text-sm font-medium mb-6 border border-[#22C55E]/20">
-            <Users className="w-4 h-4" />
+          <div className="inline-flex items-center gap-2 bg-[#22C55E]/10 text-[#22C55E] px-3 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium mb-4 sm:mb-6 border border-[#22C55E]/20">
+            <Users className="w-3 h-3 sm:w-4 sm:h-4" />
             <span>MEET THE TEAM</span>
-            <Sparkles className="w-3 h-3" />
+            <Sparkles className="w-2 h-2 sm:w-3 sm:h-3" />
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1] mb-6">
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold tracking-tight leading-[1.1] mb-4 sm:mb-6">
             Built by people who{' '}
             <span className="bg-gradient-to-r from-[#22C55E] to-emerald-400 bg-clip-text text-transparent">
               care
             </span>
           </h1>
 
-          <p className="text-lg md:text-xl text-[#94A3B8] max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-[#94A3B8] max-w-2xl mx-auto leading-relaxed px-2 sm:px-0">
             A passionate team of engineers, designers and problem solvers 
             building the future of student collaboration.
           </p>
 
-          <div className="flex items-center justify-center gap-3 mt-8">
+          <div className="flex items-center justify-center gap-3 mt-6 sm:mt-8">
             <div className="flex -space-x-2">
               {teamMembers.slice(0, 4).map((member, i) => (
-                <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-[#22C55E]/30 to-[#22C55E]/10 border-2 border-[#0B0F14] flex items-center justify-center text-[10px] font-bold text-[#94A3B8]">
+                <div key={i} className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-[#22C55E]/30 to-[#22C55E]/10 border-2 border-[#0B0F14] flex items-center justify-center text-[8px] sm:text-[10px] font-bold text-[#94A3B8]">
                   {member.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)}
                 </div>
               ))}
-              <div className="w-8 h-8 rounded-full bg-[#22C55E]/10 border-2 border-[#0B0F14] flex items-center justify-center text-[10px] font-bold text-[#94A3B8]">
+              <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-[#22C55E]/10 border-2 border-[#0B0F14] flex items-center justify-center text-[8px] sm:text-[10px] font-bold text-[#94A3B8]">
                 +{teamMembers.length - 4}
               </div>
             </div>
-            <span className="text-sm text-[#94A3B8]">{teamMembers.length} members</span>
+            <span className="text-xs sm:text-sm text-[#94A3B8]">{teamMembers.length} members</span>
           </div>
         </motion.div>
       </section>
 
       {/* Auto-Scrolling Team Section */}
-      <section className="px-6 md:px-12 max-w-7xl mx-auto mt-16 pb-32">
+      <section className="px-4 sm:px-6 md:px-12 max-w-7xl mx-auto mt-12 sm:mt-16 pb-32">
         <div className="relative">
-          {/* Controls */}
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <button
-                onClick={togglePlay}
-                className="flex items-center gap-2 bg-[#151B23] border border-[#26303D] rounded-full px-4 py-2 hover:bg-[#22C55E]/10 hover:border-[#22C55E]/30 transition-all duration-300"
-              >
-                {isPlaying ? (
-                  <>
-                    <Pause className="w-4 h-4 text-[#94A3B8]" />
-                    <span className="text-xs text-[#94A3B8]">Pause</span>
-                  </>
-                ) : (
-                  <>
-                    <Play className="w-4 h-4 text-[#22C55E]" />
-                    <span className="text-xs text-[#22C55E]">Play</span>
-                  </>
-                )}
-              </button>
-              <span className="text-xs text-[#94A3B8] opacity-50">
-                {isPlaying ? '● Live' : '● Paused'}
-              </span>
-            </div>
-            <div className="flex gap-2">
-              <button
-                onClick={() => scroll('left')}
-                className="bg-[#151B23] border border-[#26303D] rounded-full p-2 hover:bg-[#22C55E]/10 hover:border-[#22C55E]/30 transition-all duration-300"
-              >
-                <ChevronLeft className="w-4 h-4 text-[#94A3B8] hover:text-[#22C55E]" />
-              </button>
-              <button
-                onClick={() => scroll('right')}
-                className="bg-[#151B23] border border-[#26303D] rounded-full p-2 hover:bg-[#22C55E]/10 hover:border-[#22C55E]/30 transition-all duration-300"
-              >
-                <ChevronRight className="w-4 h-4 text-[#94A3B8] hover:text-[#22C55E]" />
-              </button>
-            </div>
-          </div>
-
           {/* Scroll Container */}
           <div
             ref={scrollContainerRef}
-            className="flex overflow-x-auto gap-4 pb-6 scroll-smooth hide-scrollbar"
+            className="flex overflow-x-auto gap-2 sm:gap-4 pb-4 sm:pb-6 scroll-smooth hide-scrollbar"
             style={{
               scrollbarWidth: 'none',
               msOverflowStyle: 'none',
@@ -350,10 +296,10 @@ const MastheadPage = () => {
             {infiniteMembers.map((member, index) => (
               <motion.div
                 key={`${member.id}-${index}`}
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.05, duration: 0.4 }}
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.03, duration: 0.3 }}
+                className="flex-shrink-0"
               >
                 <TeamCard member={member} />
               </motion.div>
@@ -362,13 +308,13 @@ const MastheadPage = () => {
         </div>
       </section>
 
-      <footer className="border-t border-[#26303D] px-6 md:px-12 py-8 text-[#94A3B8] text-sm flex flex-wrap justify-between items-center max-w-7xl mx-auto">
-        <div className="flex items-center gap-4">
+      <footer className="border-t border-[#26303D] px-4 sm:px-6 md:px-12 py-6 sm:py-8 text-[#94A3B8] text-xs sm:text-sm flex flex-wrap justify-between items-center max-w-7xl mx-auto">
+        <div className="flex items-center gap-3 sm:gap-4">
           <span className="text-white font-semibold">justAsk</span>
           <span>·</span>
           <span>Made with ❤️ by the JustAsk Team</span>
         </div>
-        <div className="flex gap-6 mt-4 md:mt-0">
+        <div className="flex gap-4 sm:gap-6 mt-3 sm:mt-0">
           <Link to="/" className="hover:text-white transition-colors" onClick={() => window.scrollTo(0, 0)}>Home</Link>
         </div>
       </footer>
