@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
-  Menu, X, Github, Download,
+  Menu, X, Download,
   GraduationCap, Briefcase, Heart,
   MessageCircle, Calendar, Check
 } from 'lucide-react';
@@ -63,7 +63,6 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-[#0B0F14] text-[#F8FAFC] font-sans overflow-x-hidden">
-      {/* Navigation */}
       <nav 
         className={`fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-4 flex items-center justify-between transition-all duration-300 ${
           scrolled 
@@ -79,7 +78,6 @@ export default function LandingPage() {
           <a href="#features" className="hover:text-white transition-colors">Features</a>
           <a href="#categories" className="hover:text-white transition-colors">Categories</a>
           <Link to="/masthead" className="hover:text-white transition-colors">Team</Link>
-          <a href="https://github.com/sugaredcookie/justAsk" className="hover:text-white transition-colors">GitHub</a>
           <a href="#download" className="bg-[#22C55E] hover:bg-[#16A34A] text-white px-5 py-2.5 rounded-full text-sm font-medium transition-colors shadow-lg shadow-[#22C55E]/20">Download</a>
         </div>
         <button className="md:hidden text-white p-2 hover:bg-white/10 rounded-lg transition-colors" onClick={() => setIsNavOpen(!isNavOpen)}>
@@ -87,7 +85,6 @@ export default function LandingPage() {
         </button>
       </nav>
 
-      {/* Mobile nav */}
       <AnimatePresence>
         {isNavOpen && (
           <motion.div
@@ -104,7 +101,6 @@ export default function LandingPage() {
         )}
       </AnimatePresence>
 
-      {/* Hero */}
       <section className="pt-32 md:pt-44 px-6 md:px-12 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
@@ -119,13 +115,9 @@ export default function LandingPage() {
               <a href="#download" className="bg-[#26303D] text-[#94A3B8] px-10 py-5 rounded-full font-medium flex items-center gap-2 cursor-not-allowed opacity-60">
                 <Download size={20} /> Download Android APK <br /> (Coming soon, stay tuned)
               </a>
-              <a href="https://github.com/sugaredcookie/justAsk" className="border border-[#26303D] hover:border-[#94A3B8] px-8 py-4 rounded-full font-medium flex items-center gap-2 transition-colors">
-                <Github size={20} /> View GitHub
-              </a>
             </div>
           </motion.div>
 
-          {/* Product preview */}
           <motion.div
             initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -160,7 +152,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* About */}
       <section className="px-6 md:px-12 max-w-4xl mx-auto mt-24 text-center">
         <motion.div {...fadeUp}>
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight leading-tight">
@@ -172,7 +163,6 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      {/* Categories */}
       <section id="categories" className="px-6 md:px-12 max-w-6xl mx-auto mt-28">
         <h3 className="text-3xl font-bold mb-12 tracking-tight">Categories</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -197,7 +187,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Seasonal Events */}
       <section className="px-6 md:px-12 max-w-6xl mx-auto mt-28">
         <h3 className="text-3xl font-bold mb-6 tracking-tight">Seasonal Events</h3>
         <p className="text-[#94A3B8] mb-8">Appear during relevant periods — hackathons, placement prep, and more.</p>
@@ -216,7 +205,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Direct Messaging */}
       <section className="px-6 md:px-12 max-w-6xl mx-auto mt-28 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
           <div className="bg-[#151B23] rounded-2xl border border-[#26303D] p-5 shadow-xl">
@@ -248,7 +236,6 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      {/* Planned Features */}
       <section className="px-6 md:px-12 max-w-6xl mx-auto mt-28">
         <h3 className="text-3xl font-bold mb-8 tracking-tight">Planned Features</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -261,7 +248,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Vision */}
       <section className="px-6 md:px-12 max-w-4xl mx-auto mt-32 text-center">
         <motion.div {...fadeUp}>
           <h2 className="text-4xl md:text-6xl font-bold leading-tight tracking-tight">
@@ -270,7 +256,6 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      {/* Download */}
       <section id="download" className="px-6 md:px-12 max-w-4xl mx-auto mt-32 mb-20">
         <div className="bg-[#151B23] border border-[#26303D] rounded-3xl p-12 text-center shadow-2xl">
           <div className="mb-4">
@@ -293,17 +278,13 @@ export default function LandingPage() {
             >
               <Download size={22} /> Download APK (Coming Soon)
             </button>
-            <a href="https://github.com/sugaredcookie/justAsk" className="border border-[#26303D] hover:border-[#94A3B8] px-10 py-5 rounded-full font-medium flex items-center gap-2 transition-colors">
-              <Github size={22} /> View on GitHub
-            </a>
           </div>
           <p className="text-xs text-[#94A3B8] mt-6">
-            We'll notify you when the APK is ready. Join the waitlist by starring us on GitHub.
+            We'll notify you when the APK is ready. Stay tuned for updates!
           </p>
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="border-t border-[#26303D] px-6 md:px-12 py-10 text-[#94A3B8] text-sm flex flex-wrap justify-between items-center max-w-7xl mx-auto">
         <div className="flex items-center gap-4">
           <span className="text-white font-semibold">JustAsk</span>
@@ -311,10 +292,7 @@ export default function LandingPage() {
           <span>Made with ❤️ by the JustAsk Team</span>
         </div>
         <div className="flex gap-6 mt-4 md:mt-0">
-          <a href="https://github.com/sugaredcookie/justAsk" className="hover:text-white transition-colors">GitHub</a>
-          <a href="#" className="hover:text-white transition-colors">Documentation</a>
-          <a href="#" className="hover:text-white transition-colors">Privacy</a>
-          <a href="#" className="hover:text-white transition-colors">Contact</a>
+          <Link to="/masthead" className="hover:text-white transition-colors">Team</Link>
         </div>
       </footer>
     </div>
