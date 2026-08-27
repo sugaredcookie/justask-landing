@@ -18,7 +18,7 @@ const teamMembers = [
   {
     id: 1,
     name: 'Sanidhya Verma',
-    role: 'Founder / Platform Architect / AI & DevOps',
+    role: 'Platform Architect / AI & DevOps',
     description:
       'Founder of justAsk, responsible for platform architecture, DevOps, product direction and AI systems.',
     isFounder: true,

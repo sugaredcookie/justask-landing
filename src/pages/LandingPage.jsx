@@ -223,7 +223,7 @@ export default function LandingPage() {
                 <span className="text-sm text-[#F8FAFC]">Piyush: “Let's trade! I need Flutter, I know React.”</span>
               </div>
               <div className="bg-[#22C55E]/10 rounded-xl p-3 border border-[#22C55E]/20">
-                <span className="text-sm text-[#22C55E]">✅ Collaboration started</span>
+                <span className="text-sm text-[#22C55E]">Collaboration started</span>
               </div>
             </div>
           </div>
