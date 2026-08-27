@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Menu, X, ArrowLeft, 
-  Users, Sparkles, ArrowRight
+  Users, Sparkles, ChevronLeft, ChevronRight, Pause, Play
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -88,70 +88,48 @@ const teamMembers = [
   },
 ];
 
-const TeamCard = ({ member, index }) => {
-  const [isHovered, setIsHovered] = useState(false);
+// Duplicate team members for infinite scroll effect
+const infiniteMembers = [...teamMembers, ...teamMembers, ...teamMembers];
+
+const TeamCard = ({ member }) => {
   const [imageError, setImageError] = useState(false);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.06, duration: 0.5, ease: "easeOut" }}
-      className="group"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+    <div className="flex-shrink-0 w-[280px] md:w-[320px] mx-3">
       <div className={`
-        relative rounded-2xl p-7
-        h-[380px]
+        relative rounded-2xl p-6
+        h-[360px]
         flex flex-col
         bg-[#151B23] border transition-all duration-500
         border-[#26303D] hover:border-[#22C55E]/30 hover:shadow-xl hover:shadow-[#22C55E]/5
-        ${isHovered ? 'transform -translate-y-2' : ''}
+        hover:transform hover:-translate-y-2
       `}>
-        <div className={`
-          absolute inset-0 rounded-2xl transition-opacity duration-500
-          ${isHovered ? 'opacity-100' : 'opacity-0'}
-          bg-gradient-to-br from-[#22C55E]/5 to-transparent
-        `} />
+        <div className="absolute inset-0 rounded-2xl transition-opacity duration-500 opacity-0 hover:opacity-100 bg-gradient-to-br from-[#22C55E]/5 to-transparent" />
 
         <div className="relative z-10 h-full flex flex-col">
-          {/* Tag - positioned with consistent spacing from top */}
           <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-[#22C55E]/10 border border-[#22C55E]/20 px-2.5 py-1 rounded-full">
             <span className="text-[10px] text-[#22C55E] font-medium">
               {member.isFounder ? '★ FOUNDER' : member.tag}
             </span>
           </div>
 
-          {/* Avatar with consistent spacing */}
           <div className="flex-1 flex flex-col items-center justify-center">
-            <motion.div 
-              className="relative"
-              animate={isHovered ? { y: -6, scale: 1.05 } : { y: 0, scale: 1 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className={`
-                relative w-24 h-24 rounded-2xl flex items-center justify-center
-                bg-gradient-to-br ${member.color}
-                shadow-lg overflow-hidden
-              `}>
-                {member.photo && !imageError ? (
-                  <img 
-                    src={member.photo} 
-                    alt={member.name}
-                    className="w-full h-full object-cover"
-                    onError={() => setImageError(true)}
-                  />
-                ) : (
-                  <span className="text-3xl font-bold text-white select-none">
-                    {member.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)}
-                  </span>
-                )}
-              </div>
-            </motion.div>
+            <div className="relative w-24 h-24 rounded-2xl flex items-center justify-center bg-gradient-to-br ${member.color} shadow-lg overflow-hidden">
+              {member.photo && !imageError ? (
+                <img 
+                  src={member.photo} 
+                  alt={member.name}
+                  className="w-full h-full object-cover"
+                  onError={() => setImageError(true)}
+                />
+              ) : (
+                <span className="text-3xl font-bold text-white select-none">
+                  {member.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)}
+                </span>
+              )}
+            </div>
 
-            <h3 className="text-center text-lg font-bold text-[#F8FAFC] tracking-tight group-hover:text-[#22C55E] transition-colors duration-300 mt-4">
+            <h3 className="text-center text-lg font-bold text-[#F8FAFC] tracking-tight mt-4">
               {member.name}
             </h3>
             
@@ -165,22 +143,20 @@ const TeamCard = ({ member, index }) => {
           </div>
 
           <div className="mt-4 h-0.5 w-16 mx-auto rounded-full bg-[#26303D] relative overflow-hidden flex-shrink-0">
-            <motion.div 
-              className="absolute inset-0 bg-gradient-to-r from-[#22C55E] to-emerald-400"
-              initial={{ x: '-100%' }}
-              animate={{ x: isHovered ? '0%' : '-100%' }}
-              transition={{ duration: 0.5 }}
-            />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#22C55E] to-emerald-400" />
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
 const MastheadPage = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const scrollContainerRef = useRef(null);
+  const animationRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -188,10 +164,55 @@ const MastheadPage = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const scrollSpeed = 1.2;
+
+    const autoScroll = () => {
+      if (!isPlaying) return;
+      
+      if (container) {
+        const maxScroll = container.scrollWidth - container.clientWidth;
+        const currentScroll = container.scrollLeft;
+        
+        if (currentScroll >= maxScroll - 10) {
+          container.scrollLeft = 0;
+        } else {
+          container.scrollLeft += scrollSpeed;
+        }
+      }
+      animationRef.current = requestAnimationFrame(autoScroll);
+    };
+
+    animationRef.current = requestAnimationFrame(autoScroll);
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [isPlaying]);
+
+  const scroll = (direction) => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = 340;
+      const newScrollLeft = scrollContainerRef.current.scrollLeft + (direction === 'left' ? -scrollAmount : scrollAmount);
+      scrollContainerRef.current.scrollTo({
+        left: newScrollLeft,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const togglePlay = () => {
+    setIsPlaying(!isPlaying);
+  };
 
   return (
     <div className="min-h-screen bg-[#0B0F14] text-[#F8FAFC] font-sans overflow-x-hidden">
@@ -269,13 +290,74 @@ const MastheadPage = () => {
         </motion.div>
       </section>
 
+      {/* Auto-Scrolling Team Section */}
       <section className="px-6 md:px-12 max-w-7xl mx-auto mt-16 pb-32">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {teamMembers.slice(0, 6).map((member, index) => (
-            <TeamCard key={member.id} member={member} index={index} />
-          ))}
-          <div className="md:col-start-2 lg:col-start-2">
-            <TeamCard member={teamMembers[6]} index={6} />
+        <div className="relative">
+          {/* Controls */}
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={togglePlay}
+                className="flex items-center gap-2 bg-[#151B23] border border-[#26303D] rounded-full px-4 py-2 hover:bg-[#22C55E]/10 hover:border-[#22C55E]/30 transition-all duration-300"
+              >
+                {isPlaying ? (
+                  <>
+                    <Pause className="w-4 h-4 text-[#94A3B8]" />
+                    <span className="text-xs text-[#94A3B8]">Pause</span>
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-4 h-4 text-[#22C55E]" />
+                    <span className="text-xs text-[#22C55E]">Play</span>
+                  </>
+                )}
+              </button>
+              <span className="text-xs text-[#94A3B8] opacity-50">
+                {isPlaying ? '● Live' : '● Paused'}
+              </span>
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={() => scroll('left')}
+                className="bg-[#151B23] border border-[#26303D] rounded-full p-2 hover:bg-[#22C55E]/10 hover:border-[#22C55E]/30 transition-all duration-300"
+              >
+                <ChevronLeft className="w-4 h-4 text-[#94A3B8] hover:text-[#22C55E]" />
+              </button>
+              <button
+                onClick={() => scroll('right')}
+                className="bg-[#151B23] border border-[#26303D] rounded-full p-2 hover:bg-[#22C55E]/10 hover:border-[#22C55E]/30 transition-all duration-300"
+              >
+                <ChevronRight className="w-4 h-4 text-[#94A3B8] hover:text-[#22C55E]" />
+              </button>
+            </div>
+          </div>
+
+          {/* Scroll Container */}
+          <div
+            ref={scrollContainerRef}
+            className="flex overflow-x-auto gap-4 pb-6 scroll-smooth hide-scrollbar"
+            style={{
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+            }}
+          >
+            <style>{`
+              .hide-scrollbar::-webkit-scrollbar {
+                display: none;
+              }
+            `}</style>
+            
+            {infiniteMembers.map((member, index) => (
+              <motion.div
+                key={`${member.id}-${index}`}
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.05, duration: 0.4 }}
+              >
+                <TeamCard member={member} />
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
