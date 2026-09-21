@@ -4,24 +4,40 @@ import { Link } from 'react-router-dom';
 import {
   Menu, X, Download,
   GraduationCap, Briefcase, Heart,
-  MessageCircle, Calendar, Check
+  MessageCircle, Calendar, Check,
+  Smartphone, Apple
 } from 'lucide-react';
 
 const categories = [
   {
     title: 'Skill Exchange',
     icon: <GraduationCap className="w-6 h-6 text-[#22C55E]" />,
-    examples: ['Teach Flutter ↔ Learn React', 'Teach Guitar ↔ Learn Singing', 'Teach Calculus ↔ Learn UI/UX']
+    examples: [
+      'I know React, you know Flutter. Seems useful.',
+      'Teach Guitar ↔ Learn Singing (badly)',
+      'You know Calculus? Unfortunately, someone needs you.'
+    ]
   },
   {
     title: 'Work & Earn',
     icon: <Briefcase className="w-6 h-6 text-[#22C55E]" />,
-    examples: ['Assignment Writing', 'Poster Design', 'Coding Help', 'Video Editing', 'Resume Reviews']
+    examples: [
+      'Poster Design · someone\'s probably paying for it',
+      "Small freelance jobs (no, not your assignment..but who's gonna stop you.)",
+      'Coding Help · debugging someone else\'s mess',
+      'Video Editing · cuts, memes, whatever',
+      'Resume Reviews · lie better, professionally'
+    ]
   },
   {
     title: 'Volunteer',
     icon: <Heart className="w-6 h-6 text-[#22C55E]" />,
-    examples: ['Interview Mentoring', 'Resume Reviews', 'Programming Help', 'Helping Juniors', 'College Events']
+    examples: [
+      'Help a junior survive college',
+      'Interview Mentoring · pretend you know things',
+      'Peer Learning · teach, learn, repeat',
+      'College Events · someone has to do it'
+    ]
   }
 ];
 
@@ -32,8 +48,8 @@ const seasonalEvents = [
 
 const plannedFeatures = [
   'Student Profiles', 'Ratings', 'Reviews', 'University Verification',
-  'AI Recommendations', 'Notifications', 'Saved Posts', 'Moderation',
-  'Admin Dashboard', 'Search', 'Filters', 'Tags', 'Reputation System'
+  'AI Recommendations', 'Notifications', 'Saved Posts', 'AI Moderation',
+  'Admin Dashboard', 'Search', 'Filters', 'Tags'
 ];
 
 export default function LandingPage() {
@@ -71,8 +87,8 @@ export default function LandingPage() {
         }`}
       >
         <div className="flex items-center gap-2">
-          <span className="text-2xl font-bold tracking-tight text-white">JustAsk</span>
-          <span className="hidden md:inline text-xs font-medium text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">beta</span>
+          <span className="text-2xl font-bold tracking-tight text-white">justAsk</span>
+          <span className="hidden md:inline text-xs font-medium text-[#22C55E] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">we need a logo</span>
         </div>
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-[#94A3B8]">
           <a href="#features" className="hover:text-white transition-colors">Features</a>
@@ -109,11 +125,14 @@ export default function LandingPage() {
               <span className="text-[#22C55E]">Students.</span>
             </h1>
             <p className="mt-6 text-lg md:text-xl text-[#94A3B8] max-w-lg leading-relaxed">
-              One platform for everything students can ask from one another. Learn, earn, help, and connect.
+              Students need help with random shit all the time. Finding someone who can actually help is the annoying part. So we built justAsk.
             </p>
-            <div className="mt-8 flex flex-wrap gap-4">
-              <a href="#download" className="bg-[#26303D] text-[#94A3B8] px-10 py-5 rounded-full font-medium flex items-center gap-2 cursor-not-allowed opacity-60">
-                <Download size={20} /> Download Android APK <br /> (Coming soon, stay tuned)
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a href="#download" className="bg-[#26303D] text-[#94A3B8] px-8 py-4 rounded-full font-medium flex items-center gap-2 cursor-not-allowed opacity-60">
+                <Smartphone size={20} /> Android <br /> (Coming soon)
+              </a>
+              <a href="#download" className="bg-[#26303D] text-[#94A3B8] px-8 py-4 rounded-full font-medium flex items-center gap-2 cursor-not-allowed opacity-60">
+                <Apple size={20} /> iOS <br /> (Coming soon...<br />couldn't find the apple logo)
               </a>
             </div>
           </motion.div>
@@ -126,13 +145,12 @@ export default function LandingPage() {
           >
             <div className="flex items-center gap-3 border-b border-[#26303D] pb-3 mb-4">
               <div className="w-3 h-3 rounded-full bg-[#22C55E]"></div>
-              <span className="text-sm font-medium text-[#94A3B8]">Feed · JustAsk</span>
-              <span className="ml-auto text-xs text-[#94A3B8]">● live</span>
+              <span className="text-sm font-medium text-[#94A3B8]">Feed · justAsk</span>
             </div>
             <div className="space-y-4">
               {[
                 { icon: <GraduationCap size={18} />, title: 'Skill Exchange', desc: 'Teach Flutter ↔ Learn React' },
-                { icon: <Briefcase size={18} />, title: 'Work & Earn', desc: 'Poster Design · ₹200 bid' },
+                { icon: <Briefcase size={18} />, title: 'Work & Earn', desc: 'Poster Design · someone\'s probably paying for it' },
                 { icon: <Heart size={18} />, title: 'Volunteer', desc: 'Interview Mentoring · 3 spots' }
               ].map((item, idx) => (
                 <div key={idx} className="bg-[#0B0F14]/80 rounded-xl p-4 border border-[#26303D]/60 flex items-start gap-3 hover:border-[#22C55E]/40 transition-colors">
@@ -158,7 +176,7 @@ export default function LandingPage() {
             Built for university students,<br />beyond academics.
           </h2>
           <p className="mt-4 text-[#94A3B8] text-lg max-w-2xl mx-auto leading-relaxed">
-            JustAsk connects students to learn, earn, and grow together. A trusted community where every student can help and be helped.
+            justAsk is where students help each other not fail. Find someone who actually knows the thing you're stuck on, or make a few bucks doing something you're actually good at. No LinkedIn energy, just people helping people not lose their fucking minds.
           </p>
         </motion.div>
       </section>
@@ -231,7 +249,7 @@ export default function LandingPage() {
         <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
           <h3 className="text-3xl font-bold text-[#F8FAFC]">Private conversations, <br />real outcomes.</h3>
           <p className="mt-4 text-[#94A3B8] text-lg leading-relaxed">
-            Negotiate, collaborate, and continue conversations privately. From skill swaps to paid work, everything starts with a message.
+            DM people, figure out the details, and get stuff done. Whether it's a skill swap or a quick paid gig, it all starts with a message.
           </p>
         </motion.div>
       </section>
@@ -251,7 +269,7 @@ export default function LandingPage() {
       <section className="px-6 md:px-12 max-w-4xl mx-auto mt-32 text-center">
         <motion.div {...fadeUp}>
           <h2 className="text-4xl md:text-6xl font-bold leading-tight tracking-tight">
-            A trusted community where <br />every student can <span className="text-[#22C55E]">learn, earn, help</span> and grow together.
+            A place where students can <span className="text-[#22C55E]">learn, earn, help</span> and figure stuff out together.
           </h2>
         </motion.div>
       </section>
@@ -269,27 +287,33 @@ export default function LandingPage() {
           </div>
           <h3 className="text-3xl md:text-5xl font-bold text-[#F8FAFC]">Something great is coming</h3>
           <p className="text-[#94A3B8] mt-4 max-w-lg mx-auto">
-            We're building the ultimate student collaboration platform. Stay tuned for the launch!
+            We're building the student collaboration platform we wish existed. Stay tuned for the launch!
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <button 
               disabled
-              className="bg-[#26303D] text-[#94A3B8] px-10 py-5 rounded-full font-medium flex items-center gap-2 cursor-not-allowed opacity-60"
+              className="bg-[#26303D] text-[#94A3B8] px-8 py-4 rounded-full font-medium flex items-center gap-2 cursor-not-allowed opacity-60"
             >
-              <Download size={22} /> Download APK (Coming Soon)
+              <Smartphone size={20} /> Android (Coming Soon)
+            </button>
+            <button 
+              disabled
+              className="bg-[#26303D] text-[#94A3B8] px-8 py-4 rounded-full font-medium flex items-center gap-2 cursor-not-allowed opacity-60"
+            >
+              <Apple size={20} /> iOS (Coming Soon)
             </button>
           </div>
           <p className="text-xs text-[#94A3B8] mt-6">
-            We'll notify you when the APK is ready. Stay tuned for updates!
+            We'll notify you when the apps are ready. Stay tuned for updates!
           </p>
         </div>
       </section>
 
       <footer className="border-t border-[#26303D] px-6 md:px-12 py-10 text-[#94A3B8] text-sm flex flex-wrap justify-between items-center max-w-7xl mx-auto">
         <div className="flex items-center gap-4">
-          <span className="text-white font-semibold">JustAsk</span>
+          <span className="text-white font-semibold">justAsk</span>
           <span>·</span>
-          <span>Made with ❤️ by the JustAsk Team</span>
+          <span>Made with ❤️ by the justAsk Team...hope you like it</span>
         </div>
         <div className="flex gap-6 mt-4 md:mt-0">
           <Link to="/masthead" className="hover:text-white transition-colors">Team</Link>

@@ -18,9 +18,9 @@ const teamMembers = [
   {
     id: 1,
     name: 'Sanidhya Verma',
-    role: 'Platform Architect / AI & DevOps',
+    role: "AI, DevOps & Other People's Problems",
     description:
-      'Founder of justAsk, responsible for platform architecture, DevOps, product direction and AI systems.',
+      'AI, deployement, blah blah....also the Founder',
     isFounder: true,
     color: 'from-emerald-400 to-green-600',
     photo: sanidhyaPhoto,
@@ -29,9 +29,9 @@ const teamMembers = [
   {
     id: 2,
     name: 'Piyush Patel',
-    role: 'Backend Engineer / API Lead',
+    role: 'Main Backend guy',
     description:
-      'Leading backend architecture, API development and core service implementation.',
+      'API/Backend lead, takes an annoying amount of time to deliver a simple service but gets the work done.',
     color: 'from-orange-400 to-red-600',
     photo: piyushPhoto,
     tag: 'Backend',
@@ -39,9 +39,9 @@ const teamMembers = [
   {
     id: 3,
     name: 'Hamdaan Sarfaraz',
-    role: 'Infrastructure & Platform Engineer',
+    role: 'Server & "Why Is It Down?" guy',
     description:
-      'Managing infrastructure, deployment, monitoring and platform reliability.',
+      'not sure what this guy does, something grafana...prometheus..whatever.',
     color: 'from-blue-400 to-cyan-600',
     photo: hamdaanPhoto,
     tag: 'Infrastructure',
@@ -49,9 +49,9 @@ const teamMembers = [
   {
     id: 4,
     name: 'Vishnudath Pillai',
-    role: 'DevSecOps Engineer',
+    role: 'Security guy',
     description:
-      'Responsible for infrastructure security and DevSecOps practices.',
+      'Good with DevSecOps and the server hardware was his (a fkn 10 year old laptop), so no choice.',
     color: 'from-red-400 to-rose-600',
     photo: vishnudathPhoto,
     tag: 'Security',
@@ -59,9 +59,9 @@ const teamMembers = [
   {
     id: 5,
     name: 'Sidharth Renjith',
-    role: 'Network & Systems Engineer',
+    role: 'Network & Systems guy',
     description:
-      'Responsible for network architecture, connectivity, and systems infrastructure.',
+      'Looks over the entire networking part, only person in the team who listens and gets shit done on time.',
     color: 'from-indigo-400 to-purple-600',
     photo: siddhanthPhoto,
     tag: 'Networking',
@@ -69,9 +69,9 @@ const teamMembers = [
   {
     id: 6,
     name: 'Amit Venkat',
-    role: 'Backend Engineer',
+    role: 'Inferior Backend guy',
     description:
-      'Developing backend services, APIs, database management and platform functionality.',
+      'This guy writes code, pushes, the whole pipeline breaks...but knows shit though.',
     color: 'from-yellow-400 to-orange-600',
     photo: amitPhoto,
     tag: 'Backend',
@@ -79,9 +79,9 @@ const teamMembers = [
   {
     id: 7,
     name: 'Ismit Tripathy',
-    role: 'Mobile App Engineer',
+    role: 'Flutter guy',
     description:
-      'Responsible for the Flutter mobile application and the mobile experience of justAsk.',
+      'Made the whole mobile app himself, gets excited over small things, speaking of small things.......',
     color: 'from-purple-400 to-pink-600',
     photo: ismitPhoto,
     tag: 'Mobile',
@@ -100,9 +100,8 @@ const TeamCard = ({ member }) => {
         relative rounded-2xl p-5 sm:p-6
         h-[380px] sm:h-[400px]
         flex flex-col
-        bg-[#151B23] border transition-all duration-300
+        bg-[#151B23] border transition-colors duration-300
         border-[#26303D] hover:border-[#22C55E]/30 hover:shadow-xl hover:shadow-[#22C55E]/5
-        hover:-translate-y-1 sm:hover:-translate-y-2
       `}>
         <div className="absolute inset-0 rounded-2xl transition-opacity duration-300 opacity-0 hover:opacity-100 bg-gradient-to-br from-[#22C55E]/5 to-transparent" />
 
@@ -159,6 +158,7 @@ const MastheadPage = () => {
   const [scrolled, setScrolled] = useState(false);
   const scrollContainerRef = useRef(null);
   const animationRef = useRef(null);
+  const isPausedRef = useRef(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -174,17 +174,19 @@ const MastheadPage = () => {
     const container = scrollContainerRef.current;
     if (!container) return;
 
-    const scrollSpeed = 1.5;
+    // Increased scroll speed
+    const scrollSpeed = 1;
 
     const autoScroll = () => {
-      if (container) {
+      if (container && !isPausedRef.current) {
         const maxScroll = container.scrollWidth - container.clientWidth;
         const currentScroll = container.scrollLeft;
-        
-        if (currentScroll >= maxScroll - 10) {
+
+        // Use a smaller reset threshold for smoother loop
+        if (currentScroll >= maxScroll - 2) {
           container.scrollLeft = 0;
         } else {
-          container.scrollLeft += scrollSpeed;
+          container.scrollLeft = currentScroll + scrollSpeed;
         }
       }
       animationRef.current = requestAnimationFrame(autoScroll);
@@ -198,6 +200,17 @@ const MastheadPage = () => {
       }
     };
   }, []);
+
+  // Pause on touch so mobile users can actually scroll manually
+  const handleTouchStart = () => {
+    isPausedRef.current = true;
+  };
+  const handleTouchEnd = () => {
+    // Small delay before resuming so momentum scroll isn't interrupted
+    setTimeout(() => {
+      isPausedRef.current = false;
+    }, 800);
+  };
 
   return (
     <div className="min-h-screen bg-[#0B0F14] text-[#F8FAFC] font-sans overflow-x-hidden">
@@ -281,10 +294,14 @@ const MastheadPage = () => {
           {/* Scroll Container */}
           <div
             ref={scrollContainerRef}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
             className="flex overflow-x-auto gap-2 sm:gap-4 pb-4 sm:pb-6 scroll-smooth hide-scrollbar"
             style={{
               scrollbarWidth: 'none',
               msOverflowStyle: 'none',
+              WebkitOverflowScrolling: 'touch',
+              touchAction: 'pan-x',
             }}
           >
             <style>{`
@@ -312,7 +329,7 @@ const MastheadPage = () => {
         <div className="flex items-center gap-3 sm:gap-4">
           <span className="text-white font-semibold">justAsk</span>
           <span>·</span>
-          <span>Made with ❤️ by the JustAsk Team</span>
+          <span>Made with ❤️ by the JustAsk Team...hope you like it</span>
         </div>
         <div className="flex gap-4 sm:gap-6 mt-3 sm:mt-0">
           <Link to="/" className="hover:text-white transition-colors" onClick={() => window.scrollTo(0, 0)}>Home</Link>
